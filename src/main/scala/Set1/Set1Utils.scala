@@ -1,5 +1,7 @@
 package cryptopals
 
+
+import scala.collection.immutable.ListMap
 import org.apache.commons.math3.special.Gamma.regularizedGammaQ
 import java.{util => ju}
 
@@ -23,6 +25,20 @@ object Set1Utils {
     }
     case t: Array[Byte] => ju.Base64.getEncoder.encode(t)
     case _              => Array[Byte]()
+  }
+
+  def scoring(expectedUnsort: Map[Char, Double], candidateString: Array[Char]) = {
+
+    val expected = ListMap(expectedUnsort.toSeq.sortWith (_._2 > _._2):_*)
+
+    val candidateInstances = expected map { case(x, _) => candidateString count(_ == x)} 
+    val candidateScores = candidateInstances map (x => (x.toDouble/candidateString.length) * 100)
+    
+    val scoreDiff = (expected.values zip candidateScores) map { case (x, y) => (y/x) * 2 }
+
+    
+
+
   }
 
 }

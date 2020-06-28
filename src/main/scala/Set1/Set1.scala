@@ -26,7 +26,16 @@ object Set1 extends App {
       'l' -> 4.0,
       'u' -> 2.8
     )
-
     val chars = ('a' to 'z') ++ ('A' to 'Z') ++ ('0' to '9')
+
+    val hexBytes = hexToBytes(hex)
+
+    val hexXor = chars.map(x => hexBytes.map(y => y ^ x) map (_.toByte)).toArray
+
+    val hexScore = hexXor map (x => x map (_.toChar))
+
+
+    ""
   }
 }
+ 
