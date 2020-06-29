@@ -27,18 +27,15 @@ object Set1Utils {
     case _              => Array[Byte]()
   }
 
-  def scoring(expectedUnsort: Map[Char, Double], candidateString: Array[Char]) = {
+  def scoring(expectedUnsort: Map[Char, Double], candidateString: Array[Char]): Double = {
 
     val expected = ListMap(expectedUnsort.toSeq.sortWith (_._2 > _._2):_*)
 
     val candidateInstances = expected map { case(x, _) => candidateString count(_ == x)} 
     val candidateScores = candidateInstances map (x => (x.toDouble/candidateString.length) * 100)
     
-    val scoreDiff = (expected.values zip candidateScores) map { case (x, y) => (y/x) * 2 }
+    val scored = (expected.values zip candidateScores).map { case (x, y) => (y/x) * 2 }
 
-    
-
-
+    scored.foldLeft(0.0)(_+_)
   }
-
 }
