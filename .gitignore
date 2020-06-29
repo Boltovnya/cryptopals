@@ -4,6 +4,8 @@ bin/
 project/
 target/
 build/
+.bloop/
+.metals/
 
 # eclipse
 build
@@ -18,6 +20,7 @@ build
 *.ipr
 *.iws
 .idea
+*.db
 
 # mac
 .DS_Store
