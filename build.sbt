@@ -25,6 +25,8 @@ version := "1.0"
 libraryDependencies += "org.typelevel" %% "cats-core" % "2.0.0"
 libraryDependencies += "com.typesafe.akka" %% "akka-actor-typed" % "2.6.6"
 libraryDependencies += "org.apache.commons" % "commons-math3" % "3.5"
+libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.0"
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.0" % "test"
 // Here, `libraryDependencies` is a set of dependencies, and by using `+=`,
 // we're adding the cats dependency to the set of dependencies that sbt will go
 // and fetch when it starts up.

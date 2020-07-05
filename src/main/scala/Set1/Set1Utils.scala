@@ -2,7 +2,6 @@ package cryptopals
 
 
 import scala.collection.immutable.ListMap
-import org.apache.commons.math3.special.Gamma.regularizedGammaQ
 import java.{util => ju}
 
 object Set1Utils {
@@ -27,15 +26,47 @@ object Set1Utils {
     case _              => Array[Byte]()
   }
 
+  def chiSquared(o: Double, e: Double): Double = {
+    (math.pow(o-e, 2))/e
+  }
+
   def scoring(expectedUnsort: Map[Char, Double], candidateString: Array[Char]): Double = {
 
     val expected = ListMap(expectedUnsort.toSeq.sortWith (_._2 > _._2):_*)
 
-    val candidateInstances = expected map { case(x, _) => candidateString count(_ == x)} 
+    val candidateInstances = (expected map { case(x, _) => candidateString.map(_.toLower) count(_ == x)}).toArray
+
     val candidateScores = candidateInstances map (x => (x.toDouble/candidateString.length) * 100)
     
-    val scored = (expected.values zip candidateScores).map { case (x, y) => (y/x) * 2 }
+    val scored = ((expected.values zip candidateScores).map { case (x, y) => chiSquared(y, x) }).toArray
 
-    scored.foldLeft(0.0)(_+_)
+    if (scored.foldLeft(0.0)(_+_).isInfinite) {
+      0
+    }  else {
+      scored.foldLeft(0.0)(_+_) 
+    }  
   }
+
+  def scoringWords(expectedUnsort: Map[String, Int], candidateString: String) = {
+    val expected = ListMap(expectedUnsort.toSeq.sortWith (_._2 > _._2): _*)
+
+    def countOccurences(candidate: String, target: String): Int = {
+      candidate.sliding(target.length).count(x => x == target)
+    }
+
+    val stringScored = expected.map {
+      case (x, y) => {
+        (countOccurences(candidateString.toLowerCase, x)) * y
+      }
+    }
+
+    stringScored.foldLeft(0)(_+_)
+  }
+
+  def decipher(hex: String, key: Char) = {
+    val deciphered = hexToBytes(hex).map(x => x ^ key).map(_.toChar).mkString
+    deciphered
+  }
+
+  
 }
